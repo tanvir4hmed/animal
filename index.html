@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Animal Sound Garden</title>
+    <meta
+      name="description"
+      content="A playful animal soundboard with categories for farm animals, wild animals, jungle animals, birds, pets, insects, and more."
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <div class="page-glow page-glow--left" aria-hidden="true"></div>
+      <div class="page-glow page-glow--right" aria-hidden="true"></div>
+
+      <header class="hero">
+        <div class="hero__copy">
+          <p class="hero__eyebrow">Tap a card and hear the sound</p>
+          <h1>Animal Sound Garden</h1>
+          <p class="hero__text">
+            Farm animals, wild animals, jungle animals, birds, pets, insects,
+            and a few extra sounds in one easy app for little learners.
+          </p>
+        </div>
+
+        <div class="hero__panel">
+          <label class="search-field" for="searchInput">
+            <span class="search-field__label">Search</span>
+            <input
+              id="searchInput"
+              type="search"
+              placeholder="Find cow, tiger, bee, rain..."
+              autocomplete="off"
+            />
+          </label>
+
+          <div class="mode-picker" role="group" aria-label="Picture style">
+            <button class="mode-picker__button is-active" data-asset-mode="still" type="button">
+              Still artwork
+            </button>
+            <button class="mode-picker__button" data-asset-mode="motion" type="button">
+              Motion look
+            </button>
+          </div>
+
+          <button id="stopSoundButton" class="stop-button" type="button" disabled>
+            Stop sound
+          </button>
+        </div>
+      </header>
+
+      <section class="toolbar">
+        <div id="categoryChips" class="chip-row" aria-label="Animal categories"></div>
+        <div class="toolbar__status">
+          <p id="resultCount" class="result-count">0 cards</p>
+          <p id="statusText" class="status-text">Choose any card to start.</p>
+        </div>
+      </section>
+
+      <main>
+        <section id="animalGrid" class="animal-grid" aria-live="polite"></section>
+      </main>
+
+      <section class="tips-card">
+        <div>
+          <p class="tips-card__eyebrow">Better pictures later</p>
+          <h2>Real photos or moving GIFs can drop in without changing code.</h2>
+        </div>
+        <div class="tips-card__grid">
+          <p>Use `assets/images/&lt;animal&gt;.jpg` for good still photos.</p>
+          <p>Use `assets/gifs/&lt;animal&gt;.gif` for moving visuals in motion mode.</p>
+          <p>Use `assets/sounds/&lt;animal&gt;.mp3` for real sound clips instead of voice fallback.</p>
+        </div>
+      </section>
+    </div>
+
+    <p id="liveStatus" class="sr-only" aria-live="polite"></p>
+
+    <template id="animalCardTemplate">
+      <article class="animal-card">
+        <button class="animal-card__button" type="button">
+          <div class="animal-card__visual">
+            <img class="animal-card__image" alt="" loading="lazy" />
+            <span class="animal-card__badge"></span>
+          </div>
+
+          <div class="animal-card__body">
+            <span class="animal-card__category"></span>
+            <h2 class="animal-card__name"></h2>
+            <p class="animal-card__description"></p>
+
+            <div class="animal-card__footer">
+              <span class="animal-card__sound"></span>
+              <span class="animal-card__hint">Tap to play</span>
+            </div>
+          </div>
+        </button>
+      </article>
+    </template>
+
+    <script src="app.js"></script>
+  </body>
+</html>
