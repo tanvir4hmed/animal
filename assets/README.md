@@ -1,20 +1,24 @@
 # Asset Slots
 
-Drop your own better media here when you are ready.
+Drop your real images, GIFs, and original sound clips here.
 
 ## Folders
 
-- `images/` for real still photos
-- `gifs/` for motion visuals
-- `sounds/` for real audio clips
+- `categories/` for category cover pictures
+- `gifs/` for animal GIFs or moving WebP files
+- `sounds/` for real animal sound clips
 
 ## Example names
 
-- `images/cow.jpg`
-- `images/tiger.webp`
-- `gifs/bee.gif`
+- `categories/farm.jpg`
+- `categories/wild.jpg`
+- `categories/birds.jpg`
+- `gifs/cow.gif`
+- `gifs/tiger.gif`
+- `gifs/parrot.webp`
 - `sounds/cow.mp3`
-- `sounds/rain.wav`
+- `sounds/tiger.wav`
+- `sounds/bee.ogg`
 
 ## Animal and sound slugs
 

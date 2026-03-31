@@ -1,29 +1,36 @@
-# Animal Sound Garden
+# Animal Sounds
 
-A simple tap-to-play animal sound app for kids.
+A very simple baby-friendly animal sound app.
 
-## How to use
+## Flow
 
-1. Open `index.html` in a browser.
-2. Tap any animal card to hear the sound.
-3. Use the category chips or search box to find animals faster.
-4. Switch between still artwork and motion mode from the top controls.
+1. Open `index.html`
+2. Tap a category picture
+3. Tap an animal picture
+4. The real sound plays
 
-## Add better photos, GIFs, and audio
+## Media files
 
-The app works right away with built-in stylized artwork and browser voice playback.
-If you want richer media, add files with these names:
+Category pictures:
 
-- `assets/images/cow.jpg`
-- `assets/images/tiger.webp`
+- `assets/categories/farm.jpg`
+- `assets/categories/wild.jpg`
+- `assets/categories/jungle.jpg`
+- `assets/categories/birds.jpg`
+- `assets/categories/pets.jpg`
+- `assets/categories/insects.jpg`
+- `assets/categories/other.jpg`
+
+Animal GIFs:
+
+- `assets/gifs/tiger.gif`
+- `assets/gifs/cow.gif`
 - `assets/gifs/parrot.gif`
+
+Real sounds:
+
+- `assets/sounds/tiger.mp3`
 - `assets/sounds/cow.mp3`
-- `assets/sounds/thunder.wav`
+- `assets/sounds/parrot.wav`
 
-Supported formats:
-
-- Images: `.webp`, `.jpg`, `.jpeg`, `.png`
-- Motion: `.gif`, `.webp`
-- Audio: `.mp3`, `.wav`, `.ogg`
-
-If a custom sound file is not present, the browser will speak the sound word instead, like `Moo!` or `Roar!`.
+There is no human voice fallback.

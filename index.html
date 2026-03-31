@@ -3,98 +3,56 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Animal Sound Garden</title>
+    <title>Animal Sounds</title>
     <meta
       name="description"
-      content="A playful animal soundboard with categories for farm animals, wild animals, jungle animals, birds, pets, insects, and more."
+      content="A very simple baby-friendly animal sound app with category pictures and tappable animal GIFs."
     />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
     <div class="page-shell">
-      <div class="page-glow page-glow--left" aria-hidden="true"></div>
-      <div class="page-glow page-glow--right" aria-hidden="true"></div>
-
-      <header class="hero">
-        <div class="hero__copy">
-          <p class="hero__eyebrow">Tap a card and hear the sound</p>
-          <h1>Animal Sound Garden</h1>
-          <p class="hero__text">
-            Farm animals, wild animals, jungle animals, birds, pets, insects,
-            and a few extra sounds in one easy app for little learners.
-          </p>
-        </div>
-
-        <div class="hero__panel">
-          <label class="search-field" for="searchInput">
-            <span class="search-field__label">Search</span>
-            <input
-              id="searchInput"
-              type="search"
-              placeholder="Find cow, tiger, bee, rain..."
-              autocomplete="off"
-            />
-          </label>
-
-          <div class="mode-picker" role="group" aria-label="Picture style">
-            <button class="mode-picker__button is-active" data-asset-mode="still" type="button">
-              Still artwork
-            </button>
-            <button class="mode-picker__button" data-asset-mode="motion" type="button">
-              Motion look
-            </button>
-          </div>
-
-          <button id="stopSoundButton" class="stop-button" type="button" disabled>
-            Stop sound
-          </button>
-        </div>
+      <header class="hero hero--simple">
+        <p class="hero__eyebrow">Baby mode</p>
+        <h1>Animal Sounds</h1>
+        <p class="hero__text">Tap a picture.</p>
       </header>
 
-      <section class="toolbar">
-        <div id="categoryChips" class="chip-row" aria-label="Animal categories"></div>
-        <div class="toolbar__status">
-          <p id="resultCount" class="result-count">0 cards</p>
-          <p id="statusText" class="status-text">Choose any card to start.</p>
-        </div>
-      </section>
-
       <main>
-        <section id="animalGrid" class="animal-grid" aria-live="polite"></section>
-      </main>
+        <section id="categoryView" class="view-section">
+          <div id="categoryGrid" class="category-grid" aria-label="Categories"></div>
+        </section>
 
-      <section class="tips-card">
-        <div>
-          <p class="tips-card__eyebrow">Better pictures later</p>
-          <h2>Real photos or moving GIFs can drop in without changing code.</h2>
-        </div>
-        <div class="tips-card__grid">
-          <p>Use `assets/images/&lt;animal&gt;.jpg` for good still photos.</p>
-          <p>Use `assets/gifs/&lt;animal&gt;.gif` for moving visuals in motion mode.</p>
-          <p>Use `assets/sounds/&lt;animal&gt;.mp3` for real sound clips instead of voice fallback.</p>
-        </div>
-      </section>
+        <section id="animalView" class="view-section" hidden>
+          <div class="view-topbar">
+            <button id="backButton" class="back-button" type="button">Back</button>
+            <h2 id="selectedCategoryTitle" class="view-title"></h2>
+          </div>
+
+          <section id="animalGrid" class="animal-grid" aria-live="polite"></section>
+        </section>
+      </main>
     </div>
 
     <p id="liveStatus" class="sr-only" aria-live="polite"></p>
 
+    <template id="categoryCardTemplate">
+      <article class="category-card">
+        <button class="category-card__button" type="button">
+          <img class="category-card__image" alt="" loading="lazy" />
+          <div class="category-card__overlay">
+            <h2 class="category-card__name"></h2>
+          </div>
+        </button>
+      </article>
+    </template>
+
     <template id="animalCardTemplate">
       <article class="animal-card">
         <button class="animal-card__button" type="button">
-          <div class="animal-card__visual">
-            <img class="animal-card__image" alt="" loading="lazy" />
-            <span class="animal-card__badge"></span>
-          </div>
-
-          <div class="animal-card__body">
-            <span class="animal-card__category"></span>
+          <img class="animal-card__image" alt="" loading="lazy" />
+          <div class="animal-card__overlay">
             <h2 class="animal-card__name"></h2>
-            <p class="animal-card__description"></p>
-
-            <div class="animal-card__footer">
-              <span class="animal-card__sound"></span>
-              <span class="animal-card__hint">Tap to play</span>
-            </div>
           </div>
         </button>
       </article>
