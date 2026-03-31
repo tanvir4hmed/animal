@@ -11,7 +11,9 @@ A very simple baby-friendly animal sound app.
 
 ## Built-in media
 
-The app now includes real online media from Wikimedia Commons, so it shows real pictures and plays real sounds immediately.
+The app now fetches open-licensed images and sounds live from Openverse.
+Each category has 10 items.
+An internet connection is required for the built-in media.
 
 ## Optional local override
 
@@ -30,7 +32,7 @@ If you want to replace the built-in media with your own local files, use:
 - `assets/sounds/cow.mp3`
 - `assets/sounds/parrot.wav`
 
-Local files are tried first. If they are missing, the app falls back to the built-in Wikimedia media.
+Local files are tried first. If they are missing, the app falls back to the built-in Openverse search results.
 
 ## Credits
 

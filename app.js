@@ -1,191 +1,107 @@
 const STORAGE_KEY = "animal-sounds-baby-state";
+const OPENVERSE_BASE = "https://api.openverse.org/v1";
 const LOCAL_CATEGORY_EXTENSIONS = ["gif", "webp", "jpg", "jpeg", "png"];
 const LOCAL_ANIMAL_EXTENSIONS = ["gif", "webp", "jpg", "jpeg", "png"];
 const LOCAL_SOUND_EXTENSIONS = ["mp3", "wav", "ogg"];
 
-function commonsFilePath(fileName) {
-  return `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(fileName)}`;
-}
-
 const CATEGORY_META = {
-  farm: {
-    label: "Farm",
-    coverUrl: "https://upload.wikimedia.org/wikipedia/commons/a/a9/Holstein_cow_%281%29.jpg",
-  },
-  wild: {
-    label: "Wild",
-    coverUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Lion_%2836326193942%29.jpg/960px-Lion_%2836326193942%29.jpg",
-  },
-  jungle: {
-    label: "Jungle",
-    coverUrl: "https://upload.wikimedia.org/wikipedia/commons/4/49/Panthera_tigris_tigris.jpg",
-  },
-  birds: {
-    label: "Birds",
-    coverUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/Duck_%2827479047527%29.jpg/1280px-Duck_%2827479047527%29.jpg",
-  },
-  pets: {
-    label: "Pets",
-    coverUrl: "https://upload.wikimedia.org/wikipedia/commons/e/e1/Photo_of_a_dog.jpg",
-  },
-  insects: {
-    label: "Insects",
-    coverUrl: commonsFilePath("Flower_and_Bee.jpg"),
-  },
+  farm: { label: "Farm", coverQuery: "farm animals" },
+  wild: { label: "Wild", coverQuery: "wild animals" },
+  jungle: { label: "Jungle", coverQuery: "jungle animals" },
+  birds: { label: "Birds", coverQuery: "birds" },
+  pets: { label: "Pets", coverQuery: "pets" },
+  insects: { label: "Insects", coverQuery: "insects" },
 };
 
 const CATEGORY_ORDER = ["farm", "wild", "jungle", "birds", "pets", "insects"];
 
-const ANIMALS = [
-  {
-    slug: "cow",
-    name: "Cow",
-    category: "farm",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/a/a9/Holstein_cow_%281%29.jpg",
-    mediaSources: [
-      {
-        type: "audio",
-        url: "https://upload.wikimedia.org/wikipedia/commons/transcoded/4/48/Mudchute_cow_1.ogg/Mudchute_cow_1.ogg.mp3",
-      },
-    ],
-  },
-  {
-    slug: "horse",
-    name: "Horse",
-    category: "farm",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/Horse_%28Unsplash%29.jpg/1280px-Horse_%28Unsplash%29.jpg",
-    mediaSources: [
-      {
-        type: "audio",
-        url: "https://upload.wikimedia.org/wikipedia/commons/transcoded/d/db/Wiehern.ogg/Wiehern.ogg.mp3",
-      },
-    ],
-  },
-  {
-    slug: "lion",
-    name: "Lion",
-    category: "wild",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Lion_%2836326193942%29.jpg/960px-Lion_%2836326193942%29.jpg",
-    mediaSources: [
-      {
-        type: "audio",
-        url: "https://upload.wikimedia.org/wikipedia/commons/transcoded/7/7d/Lion_raring-sound1TamilNadu178.ogg/Lion_raring-sound1TamilNadu178.ogg.mp3",
-      },
-    ],
-  },
-  {
-    slug: "elephant",
-    name: "Elephant",
-    category: "wild",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/Elephant_%282404607215%29.jpg/960px-Elephant_%282404607215%29.jpg",
-    mediaSources: [
-      {
-        type: "audio",
-        url: "https://upload.wikimedia.org/wikipedia/commons/transcoded/4/40/Elephant_voice_-_trumpeting.ogg/Elephant_voice_-_trumpeting.ogg.mp3",
-      },
-    ],
-  },
-  {
-    slug: "tiger",
-    name: "Tiger",
-    category: "jungle",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/4/49/Panthera_tigris_tigris.jpg",
-    mediaSources: [
-      {
-        type: "video",
-        url: "https://upload.wikimedia.org/wikipedia/commons/transcoded/d/d3/Panthera_tigris3.ogv/Panthera_tigris3.ogv.360p.webm",
-      },
-      {
-        type: "video",
-        url: "https://upload.wikimedia.org/wikipedia/commons/transcoded/d/d3/Panthera_tigris3.ogv/Panthera_tigris3.ogv.144p.mjpeg.mov",
-      },
-    ],
-  },
-  {
-    slug: "monkey",
-    name: "Monkey",
-    category: "jungle",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/Macaque_Monkey_%2816787053847%29.jpg/1280px-Macaque_Monkey_%2816787053847%29.jpg",
-    mediaSources: [
-      {
-        type: "audio",
-        url: "https://upload.wikimedia.org/wikipedia/commons/transcoded/2/28/Sound-of-stump-tailed-macaque-%28macaca-arctoides%29.ogg/Sound-of-stump-tailed-macaque-%28macaca-arctoides%29.ogg.mp3",
-      },
-    ],
-  },
-  {
-    slug: "duck",
-    name: "Duck",
-    category: "birds",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/Duck_%2827479047527%29.jpg/1280px-Duck_%2827479047527%29.jpg",
-    mediaSources: [
-      {
-        type: "audio",
-        url: "https://upload.wikimedia.org/wikipedia/commons/transcoded/f/f3/Mudchute_duck_2.ogg/Mudchute_duck_2.ogg.mp3",
-      },
-    ],
-  },
-  {
-    slug: "owl",
-    name: "Owl",
-    category: "birds",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/8/8b/Owl_%2829211223804%29.jpg",
-    mediaSources: [
-      {
-        type: "audio",
-        url: "https://upload.wikimedia.org/wikipedia/commons/transcoded/9/91/Tawny_Owl_%28Strix_aluco%29_%28W1CDR0001519_BD8%29.ogg/Tawny_Owl_%28Strix_aluco%29_%28W1CDR0001519_BD8%29.ogg.mp3",
-      },
-    ],
-  },
-  {
-    slug: "dog",
-    name: "Dog",
-    category: "pets",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/e/e1/Photo_of_a_dog.jpg",
-    mediaSources: [
-      {
-        type: "audio",
-        url: "https://upload.wikimedia.org/wikipedia/commons/transcoded/5/58/Barking_of_a_dog_2.ogg/Barking_of_a_dog_2.ogg.mp3",
-      },
-    ],
-  },
-  {
-    slug: "cat",
-    name: "Cat",
-    category: "pets",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/e/e1/A_cat.jpg",
-    mediaSources: [
-      {
-        type: "audio",
-        url: "https://upload.wikimedia.org/wikipedia/commons/transcoded/6/62/Meow.ogg/Meow.ogg.mp3",
-      },
-    ],
-  },
-  {
-    slug: "bee",
-    name: "Bee",
-    category: "insects",
-    imageUrl: commonsFilePath("Flower_and_Bee.jpg"),
-    mediaSources: [
-      {
-        type: "audio",
-        url: "https://upload.wikimedia.org/wikipedia/commons/transcoded/0/0f/Bee_buzzing_sound_%28animal_noises%29.opus/Bee_buzzing_sound_%28animal_noises%29.opus.mp3",
-      },
-    ],
-  },
-  {
-    slug: "cricket",
-    name: "Cricket",
-    category: "insects",
-    imageUrl: commonsFilePath("Cricket.jpg"),
-    mediaSources: [
-      {
-        type: "audio",
-        url: "https://upload.wikimedia.org/wikipedia/commons/transcoded/8/80/Field_cricket_Gryllus_pennsylvanicus.ogg/Field_cricket_Gryllus_pennsylvanicus.ogg.mp3",
-      },
-    ],
-  },
-];
+const CATEGORY_ITEMS = {
+  farm: [
+    ["cow", "Cow", "cow", "cow moo"],
+    ["horse", "Horse", "horse", "horse neigh"],
+    ["sheep", "Sheep", "sheep", "sheep bleat"],
+    ["goat", "Goat", "goat", "goat bleat"],
+    ["pig", "Pig", "pig", "pig oink"],
+    ["chicken", "Chicken", "chicken", "chicken cluck"],
+    ["rooster", "Rooster", "rooster", "rooster crow"],
+    ["donkey", "Donkey", "donkey", "donkey bray"],
+    ["buffalo", "Buffalo", "buffalo animal", "buffalo sound"],
+    ["turkey", "Turkey", "turkey bird", "turkey gobble"],
+  ],
+  wild: [
+    ["lion", "Lion", "lion animal", "lion roar"],
+    ["elephant", "Elephant", "elephant animal", "elephant trumpet"],
+    ["zebra", "Zebra", "zebra animal", "zebra sound"],
+    ["giraffe", "Giraffe", "giraffe animal", "giraffe sound"],
+    ["bear", "Bear", "bear animal", "bear growl"],
+    ["wolf", "Wolf", "wolf animal", "wolf howl"],
+    ["fox", "Fox", "fox animal", "fox bark"],
+    ["deer", "Deer", "deer animal", "deer sound"],
+    ["rhino", "Rhino", "rhinoceros animal", "rhino sound"],
+    ["hippo", "Hippo", "hippopotamus animal", "hippo sound"],
+  ],
+  jungle: [
+    ["tiger", "Tiger", "tiger animal", "tiger roar"],
+    ["monkey", "Monkey", "monkey animal", "monkey call"],
+    ["gorilla", "Gorilla", "gorilla animal", "gorilla sound"],
+    ["leopard", "Leopard", "leopard animal", "leopard growl"],
+    ["jaguar", "Jaguar", "jaguar animal", "jaguar roar"],
+    ["crocodile", "Crocodile", "crocodile animal", "crocodile sound"],
+    ["snake", "Snake", "snake animal", "snake hiss"],
+    ["chimpanzee", "Chimpanzee", "chimpanzee animal", "chimpanzee call"],
+    ["toucan", "Toucan", "toucan bird", "toucan call"],
+    ["orangutan", "Orangutan", "orangutan animal", "orangutan call"],
+  ],
+  birds: [
+    ["owl", "Owl", "owl bird", "owl hoot"],
+    ["parrot", "Parrot", "parrot bird", "parrot squawk"],
+    ["duck", "Duck", "duck bird", "duck quack"],
+    ["crow", "Crow", "crow bird", "crow caw"],
+    ["eagle", "Eagle", "eagle bird", "eagle call"],
+    ["sparrow", "Sparrow", "sparrow bird", "sparrow chirp"],
+    ["pigeon", "Pigeon", "pigeon bird", "pigeon coo"],
+    ["peacock", "Peacock", "peacock bird", "peacock call"],
+    ["goose", "Goose", "goose bird", "goose honk"],
+    ["swan", "Swan", "swan bird", "swan sound"],
+  ],
+  pets: [
+    ["dog", "Dog", "dog pet", "dog bark"],
+    ["cat", "Cat", "cat pet", "cat meow"],
+    ["rabbit", "Rabbit", "rabbit pet", "rabbit sound"],
+    ["hamster", "Hamster", "hamster pet", "hamster squeak"],
+    ["guinea-pig", "Guinea Pig", "guinea pig pet", "guinea pig sound"],
+    ["parakeet", "Parakeet", "parakeet bird", "parakeet chirp"],
+    ["canary", "Canary", "canary bird", "canary chirp"],
+    ["cockatiel", "Cockatiel", "cockatiel bird", "cockatiel sound"],
+    ["budgie", "Budgie", "budgie bird", "budgie chirp"],
+    ["lovebird", "Lovebird", "lovebird bird", "lovebird sound"],
+  ],
+  insects: [
+    ["bee", "Bee", "bee insect", "bee buzz"],
+    ["cricket", "Cricket", "cricket insect", "cricket chirp"],
+    ["mosquito", "Mosquito", "mosquito insect", "mosquito buzz"],
+    ["cicada", "Cicada", "cicada insect", "cicada sound"],
+    ["grasshopper", "Grasshopper", "grasshopper insect", "grasshopper sound"],
+    ["fly", "Fly", "fly insect", "fly buzz"],
+    ["wasp", "Wasp", "wasp insect", "wasp buzz"],
+    ["hornet", "Hornet", "hornet insect", "hornet buzz"],
+    ["beetle", "Beetle", "beetle insect", "beetle sound"],
+    ["locust", "Locust", "locust insect", "locust sound"],
+  ],
+};
+
+const ANIMALS = Object.entries(CATEGORY_ITEMS).flatMap(([category, items]) =>
+  items.map(([slug, name, imageQuery, audioQuery]) => ({
+    slug,
+    name,
+    category,
+    imageQuery,
+    audioQuery,
+  }))
+);
+
+const imageCache = new Map();
+const audioCache = new Map();
 
 const state = {
   activeCategory: null,
@@ -194,7 +110,7 @@ const state = {
 const playback = {
   activeSlug: null,
   activeButton: null,
-  element: null,
+  audio: null,
 };
 
 let playSequence = 0;
@@ -260,6 +176,7 @@ function openCategory(categoryId, { skipPersist = false } = {}) {
   categoryView.hidden = true;
   animalView.hidden = false;
   renderAnimalGrid(categoryId);
+  warmCategoryCache(categoryId);
   announce(`${meta.label} category.`);
 
   if (!skipPersist) {
@@ -300,44 +217,174 @@ function renderAnimalGrid(categoryId) {
   });
 }
 
+function warmCategoryCache(categoryId) {
+  const meta = CATEGORY_META[categoryId];
+  const animals = ANIMALS.filter((animal) => animal.category === categoryId);
+
+  void getImageForQuery(meta.coverQuery);
+  animals.forEach((animal) => {
+    void getImageForQuery(animal.imageQuery);
+    void getAudioSourcesForQuery(animal.audioQuery);
+  });
+}
+
 function loadCategoryVisual(imageElement, categoryId, meta) {
-  loadImageWithFallback(
+  const fallback = buildCategoryFallbackArtwork(meta);
+  imageElement.src = fallback;
+
+  void applyBestImage(
     imageElement,
-    [
-      ...buildFileCandidates(`assets/categories/${categoryId}`, LOCAL_CATEGORY_EXTENSIONS),
-      meta.coverUrl,
-    ],
-    buildCategoryFallbackArtwork(meta)
+    buildFileCandidates(`assets/categories/${categoryId}`, LOCAL_CATEGORY_EXTENSIONS),
+    meta.coverQuery,
+    fallback
   );
 }
 
 function loadAnimalVisual(imageElement, animal) {
-  loadImageWithFallback(
+  const fallback = buildAnimalFallbackArtwork(animal);
+  imageElement.src = fallback;
+
+  void applyBestImage(
     imageElement,
-    [
-      ...buildFileCandidates(`assets/gifs/${animal.slug}`, LOCAL_ANIMAL_EXTENSIONS),
-      animal.imageUrl,
-    ],
-    buildAnimalFallbackArtwork(animal)
+    buildFileCandidates(`assets/gifs/${animal.slug}`, LOCAL_ANIMAL_EXTENSIONS),
+    animal.imageQuery,
+    fallback
   );
 }
 
-function loadImageWithFallback(imageElement, candidates, fallbackSrc) {
-  let index = 0;
+async function applyBestImage(imageElement, localCandidates, remoteQuery, fallbackSrc) {
+  const localUrl = await findFirstLoadableImage(localCandidates);
 
-  const tryNext = () => {
-    if (index >= candidates.length) {
-      imageElement.onerror = null;
-      imageElement.src = fallbackSrc;
-      return;
+  if (localUrl) {
+    imageElement.src = localUrl;
+    return;
+  }
+
+  const remote = await getImageForQuery(remoteQuery);
+
+  if (remote?.url) {
+    imageElement.src = remote.url;
+    return;
+  }
+
+  imageElement.src = fallbackSrc;
+}
+
+async function findFirstLoadableImage(candidates) {
+  for (const url of candidates) {
+    if (await canLoadImage(url)) {
+      return url;
+    }
+  }
+
+  return null;
+}
+
+function canLoadImage(url) {
+  return new Promise((resolve) => {
+    const img = new Image();
+    let settled = false;
+
+    const finish = (value) => {
+      if (settled) {
+        return;
+      }
+      settled = true;
+      resolve(value);
+    };
+
+    const timeoutId = window.setTimeout(() => finish(false), 3000);
+
+    img.onload = () => {
+      window.clearTimeout(timeoutId);
+      finish(true);
+    };
+
+    img.onerror = () => {
+      window.clearTimeout(timeoutId);
+      finish(false);
+    };
+
+    img.src = url;
+  });
+}
+
+async function getImageForQuery(query) {
+  if (imageCache.has(query)) {
+    return imageCache.get(query);
+  }
+
+  const endpoint = `${OPENVERSE_BASE}/images/?q=${encodeURIComponent(
+    query
+  )}&license_type=commercial&page_size=1`;
+
+  try {
+    const response = await fetch(endpoint, {
+      headers: { "User-Agent": "Mozilla/5.0" },
+    });
+
+    if (!response.ok) {
+      imageCache.set(query, null);
+      return null;
     }
 
-    imageElement.src = candidates[index];
-    index += 1;
-  };
+    const data = await response.json();
+    const result = data.results?.[0];
+    const media = result
+      ? {
+          url: result.thumbnail || result.url,
+          sourceUrl: result.foreign_landing_url || result.url,
+          creator: result.creator,
+          license: result.license,
+          source: result.source,
+        }
+      : null;
 
-  imageElement.onerror = tryNext;
-  tryNext();
+    imageCache.set(query, media);
+    return media;
+  } catch {
+    imageCache.set(query, null);
+    return null;
+  }
+}
+
+async function getAudioSourcesForQuery(query) {
+  if (audioCache.has(query)) {
+    return audioCache.get(query);
+  }
+
+  const endpoint = `${OPENVERSE_BASE}/audio/?q=${encodeURIComponent(
+    query
+  )}&license_type=commercial&page_size=5`;
+
+  try {
+    const response = await fetch(endpoint, {
+      headers: { "User-Agent": "Mozilla/5.0" },
+    });
+
+    if (!response.ok) {
+      audioCache.set(query, []);
+      return [];
+    }
+
+    const data = await response.json();
+    const sources = (data.results || [])
+      .filter((result) => result.url)
+      .map((result) => ({
+        type: "audio",
+        url: result.url,
+        sourceUrl: result.foreign_landing_url || result.url,
+        creator: result.creator,
+        license: result.license,
+        source: result.source,
+      }));
+
+    audioCache.set(query, sources);
+    return sources;
+  } catch {
+    audioCache.set(query, []);
+    return [];
+  }
 }
 
 function buildFileCandidates(basePath, extensions) {
@@ -403,118 +450,118 @@ function handlePlayClick(animal, button) {
   button.classList.add("is-playing");
   announce(`${animal.name}.`);
 
-  playMediaIfAvailable(animal, currentSequence).then((played) => {
+  void playMediaIfAvailable(animal, currentSequence).then((played) => {
     if (currentSequence !== playSequence) {
       return;
     }
 
     if (!played) {
       stopCurrentPlayback({ announce: false });
-      announce(`${animal.name} media missing.`);
+      announce(`${animal.name} sound missing.`);
     }
   });
 }
 
-function playMediaIfAvailable(animal, sequence) {
+async function playMediaIfAvailable(animal, sequence) {
+  const remoteSources = await getAudioSourcesForQuery(animal.audioQuery);
   const sources = [
     ...buildFileCandidates(`assets/sounds/${animal.slug}`, LOCAL_SOUND_EXTENSIONS).map((url) => ({
       type: "audio",
       url,
     })),
-    ...animal.mediaSources,
+    ...remoteSources,
   ];
 
+  return playCandidateSources(sources, animal, sequence);
+}
+
+function playCandidateSources(sources, animal, sequence) {
   return new Promise((resolve) => {
+    const audio = new Audio();
     let index = 0;
+    let timeoutId = null;
+
+    const clearAttempt = () => {
+      if (timeoutId) {
+        window.clearTimeout(timeoutId);
+        timeoutId = null;
+      }
+      audio.removeEventListener("loadeddata", handleLoaded);
+      audio.removeEventListener("error", handleError);
+    };
+
+    const finish = (didPlay) => {
+      clearAttempt();
+      if (!didPlay) {
+        audio.pause();
+        audio.removeAttribute("src");
+        audio.load();
+      }
+      resolve(didPlay);
+    };
 
     const tryNext = () => {
+      clearAttempt();
+
       if (sequence !== playSequence) {
-        resolve(false);
+        finish(false);
         return;
       }
 
       if (index >= sources.length) {
-        resolve(false);
+        finish(false);
         return;
       }
 
-      const source = sources[index];
+      audio.addEventListener("loadeddata", handleLoaded, { once: true });
+      audio.addEventListener("error", handleError, { once: true });
+      audio.src = sources[index].url;
       index += 1;
-
-      const element = source.type === "video" ? document.createElement("video") : new Audio();
-      let timeoutId = null;
-
-      const cleanup = () => {
-        if (timeoutId) {
-          window.clearTimeout(timeoutId);
-          timeoutId = null;
-        }
-        element.removeEventListener("loadeddata", handleLoaded);
-        element.removeEventListener("error", handleError);
-      };
-
-      const handleLoaded = async () => {
-        cleanup();
-
-        if (sequence !== playSequence) {
-          stopElement(element);
-          resolve(false);
-          return;
-        }
-
-        try {
-          element.currentTime = 0;
-          playback.element = element;
-          element.onended = () => {
-            if (sequence === playSequence) {
-              stopCurrentPlayback({ announce: false });
-              announce(`${animal.name} done.`);
-            }
-          };
-          await element.play();
-          resolve(true);
-        } catch {
-          stopElement(element);
-          tryNext();
-        }
-      };
-
-      const handleError = () => {
-        cleanup();
-        stopElement(element);
-        tryNext();
-      };
-
-      element.preload = "auto";
-      element.src = source.url;
-      if ("playsInline" in element) {
-        element.playsInline = true;
-      }
-      element.addEventListener("loadeddata", handleLoaded, { once: true });
-      element.addEventListener("error", handleError, { once: true });
-      element.load();
+      audio.load();
 
       timeoutId = window.setTimeout(() => {
-        cleanup();
-        stopElement(element);
         tryNext();
-      }, 2500);
+      }, 3000);
+    };
+
+    const handleLoaded = async () => {
+      clearAttempt();
+
+      if (sequence !== playSequence) {
+        finish(false);
+        return;
+      }
+
+      try {
+        playback.audio = audio;
+        audio.onended = () => {
+          if (sequence === playSequence) {
+            stopCurrentPlayback({ announce: false });
+            announce(`${animal.name} done.`);
+          }
+        };
+        await audio.play();
+        resolve(true);
+      } catch {
+        tryNext();
+      }
+    };
+
+    const handleError = () => {
+      tryNext();
     };
 
     tryNext();
   });
 }
 
-function stopElement(element) {
-  element.pause();
-  element.removeAttribute("src");
-  element.load();
-}
-
 function stopCurrentPlayback({ announce }) {
-  if (playback.element) {
-    stopElement(playback.element);
-    playback.element = null;
+  if (playback.audio) {
+    playback.audio.pause();
+    playback.audio.currentTime = 0;
+    playback.audio.removeAttribute("src");
+    playback.audio.load();
+    playback.audio = null;
   }
 
   if (playback.activeButton) {
