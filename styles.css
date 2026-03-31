@@ -96,6 +96,41 @@ img {
   font-size: clamp(1.6rem, 4vw, 2.4rem);
 }
 
+.page-footer {
+  padding-top: 14px;
+  text-align: center;
+}
+
+.credits-link {
+  color: #486457;
+  font-size: 0.92rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.credits-link:hover,
+.credits-link:focus-visible {
+  text-decoration: underline;
+}
+
+.credits-page {
+  padding: 8px 0 20px;
+}
+
+.credits-list {
+  margin: 18px 0 0;
+  padding: 20px 22px 20px 42px;
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  background: rgba(255, 250, 241, 0.82);
+  box-shadow: var(--shadow);
+}
+
+.credits-list li {
+  margin: 0 0 12px;
+  line-height: 1.5;
+}
+
 .category-grid,
 .animal-grid {
   display: grid;

@@ -1,6 +1,6 @@
 # Asset Slots
 
-Drop your real images, GIFs, and original sound clips here.
+Drop your own files here only if you want to replace the built-in online media.
 
 ## Folders
 

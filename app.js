@@ -1,77 +1,190 @@
 const STORAGE_KEY = "animal-sounds-baby-state";
-const CATEGORY_VISUAL_EXTENSIONS = ["gif", "webp", "jpg", "jpeg", "png"];
-const ANIMAL_VISUAL_EXTENSIONS = ["gif", "webp"];
-const AUDIO_EXTENSIONS = ["mp3", "wav", "ogg"];
+const LOCAL_CATEGORY_EXTENSIONS = ["gif", "webp", "jpg", "jpeg", "png"];
+const LOCAL_ANIMAL_EXTENSIONS = ["gif", "webp", "jpg", "jpeg", "png"];
+const LOCAL_SOUND_EXTENSIONS = ["mp3", "wav", "ogg"];
+
+function commonsFilePath(fileName) {
+  return `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(fileName)}`;
+}
 
 const CATEGORY_META = {
   farm: {
     label: "Farm",
-    palette: { start: "#f3d785", end: "#a7d39a", accent: "#507c2d" },
+    coverUrl: "https://upload.wikimedia.org/wikipedia/commons/a/a9/Holstein_cow_%281%29.jpg",
   },
   wild: {
     label: "Wild",
-    palette: { start: "#edbf78", end: "#c88453", accent: "#874620" },
+    coverUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Lion_%2836326193942%29.jpg/960px-Lion_%2836326193942%29.jpg",
   },
   jungle: {
     label: "Jungle",
-    palette: { start: "#6bbf86", end: "#215a4e", accent: "#dff5b0" },
+    coverUrl: "https://upload.wikimedia.org/wikipedia/commons/4/49/Panthera_tigris_tigris.jpg",
   },
   birds: {
     label: "Birds",
-    palette: { start: "#a4d8f8", end: "#5d91d2", accent: "#1f4e8c" },
+    coverUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/Duck_%2827479047527%29.jpg/1280px-Duck_%2827479047527%29.jpg",
   },
   pets: {
     label: "Pets",
-    palette: { start: "#f3b69f", end: "#f18d78", accent: "#933d2e" },
+    coverUrl: "https://upload.wikimedia.org/wikipedia/commons/e/e1/Photo_of_a_dog.jpg",
   },
   insects: {
     label: "Insects",
-    palette: { start: "#cfd96c", end: "#7ea04a", accent: "#445b1b" },
-  },
-  other: {
-    label: "Other",
-    palette: { start: "#7dbbd3", end: "#395974", accent: "#e8f7ff" },
+    coverUrl: commonsFilePath("Flower_and_Bee.jpg"),
   },
 };
 
-const CATEGORY_ORDER = ["farm", "wild", "jungle", "birds", "pets", "insects", "other"];
+const CATEGORY_ORDER = ["farm", "wild", "jungle", "birds", "pets", "insects"];
 
 const ANIMALS = [
-  { slug: "cow", name: "Cow", category: "farm" },
-  { slug: "goat", name: "Goat", category: "farm" },
-  { slug: "sheep", name: "Sheep", category: "farm" },
-  { slug: "horse", name: "Horse", category: "farm" },
-  { slug: "pig", name: "Pig", category: "farm" },
-  { slug: "lion", name: "Lion", category: "wild" },
-  { slug: "elephant", name: "Elephant", category: "wild" },
-  { slug: "bear", name: "Bear", category: "wild" },
-  { slug: "wolf", name: "Wolf", category: "wild" },
-  { slug: "zebra", name: "Zebra", category: "wild" },
-  { slug: "tiger", name: "Tiger", category: "jungle" },
-  { slug: "monkey", name: "Monkey", category: "jungle" },
-  { slug: "gorilla", name: "Gorilla", category: "jungle" },
-  { slug: "snake", name: "Snake", category: "jungle" },
-  { slug: "leopard", name: "Leopard", category: "jungle" },
-  { slug: "chicken", name: "Chicken", category: "birds" },
-  { slug: "duck", name: "Duck", category: "birds" },
-  { slug: "owl", name: "Owl", category: "birds" },
-  { slug: "parrot", name: "Parrot", category: "birds" },
-  { slug: "rooster", name: "Rooster", category: "birds" },
-  { slug: "dog", name: "Dog", category: "pets" },
-  { slug: "cat", name: "Cat", category: "pets" },
-  { slug: "rabbit", name: "Rabbit", category: "pets" },
-  { slug: "hamster", name: "Hamster", category: "pets" },
-  { slug: "canary", name: "Canary", category: "pets" },
-  { slug: "bee", name: "Bee", category: "insects" },
-  { slug: "cricket", name: "Cricket", category: "insects" },
-  { slug: "grasshopper", name: "Grasshopper", category: "insects" },
-  { slug: "mosquito", name: "Mosquito", category: "insects" },
-  { slug: "cicada", name: "Cicada", category: "insects" },
-  { slug: "rain", name: "Rain", category: "other" },
-  { slug: "thunder", name: "Thunder", category: "other" },
-  { slug: "wind", name: "Wind", category: "other" },
-  { slug: "train", name: "Train", category: "other" },
-  { slug: "bell", name: "Bell", category: "other" },
+  {
+    slug: "cow",
+    name: "Cow",
+    category: "farm",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/a/a9/Holstein_cow_%281%29.jpg",
+    mediaSources: [
+      {
+        type: "audio",
+        url: "https://upload.wikimedia.org/wikipedia/commons/transcoded/4/48/Mudchute_cow_1.ogg/Mudchute_cow_1.ogg.mp3",
+      },
+    ],
+  },
+  {
+    slug: "horse",
+    name: "Horse",
+    category: "farm",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/Horse_%28Unsplash%29.jpg/1280px-Horse_%28Unsplash%29.jpg",
+    mediaSources: [
+      {
+        type: "audio",
+        url: "https://upload.wikimedia.org/wikipedia/commons/transcoded/d/db/Wiehern.ogg/Wiehern.ogg.mp3",
+      },
+    ],
+  },
+  {
+    slug: "lion",
+    name: "Lion",
+    category: "wild",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Lion_%2836326193942%29.jpg/960px-Lion_%2836326193942%29.jpg",
+    mediaSources: [
+      {
+        type: "audio",
+        url: "https://upload.wikimedia.org/wikipedia/commons/transcoded/7/7d/Lion_raring-sound1TamilNadu178.ogg/Lion_raring-sound1TamilNadu178.ogg.mp3",
+      },
+    ],
+  },
+  {
+    slug: "elephant",
+    name: "Elephant",
+    category: "wild",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/Elephant_%282404607215%29.jpg/960px-Elephant_%282404607215%29.jpg",
+    mediaSources: [
+      {
+        type: "audio",
+        url: "https://upload.wikimedia.org/wikipedia/commons/transcoded/4/40/Elephant_voice_-_trumpeting.ogg/Elephant_voice_-_trumpeting.ogg.mp3",
+      },
+    ],
+  },
+  {
+    slug: "tiger",
+    name: "Tiger",
+    category: "jungle",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/4/49/Panthera_tigris_tigris.jpg",
+    mediaSources: [
+      {
+        type: "video",
+        url: "https://upload.wikimedia.org/wikipedia/commons/transcoded/d/d3/Panthera_tigris3.ogv/Panthera_tigris3.ogv.360p.webm",
+      },
+      {
+        type: "video",
+        url: "https://upload.wikimedia.org/wikipedia/commons/transcoded/d/d3/Panthera_tigris3.ogv/Panthera_tigris3.ogv.144p.mjpeg.mov",
+      },
+    ],
+  },
+  {
+    slug: "monkey",
+    name: "Monkey",
+    category: "jungle",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/Macaque_Monkey_%2816787053847%29.jpg/1280px-Macaque_Monkey_%2816787053847%29.jpg",
+    mediaSources: [
+      {
+        type: "audio",
+        url: "https://upload.wikimedia.org/wikipedia/commons/transcoded/2/28/Sound-of-stump-tailed-macaque-%28macaca-arctoides%29.ogg/Sound-of-stump-tailed-macaque-%28macaca-arctoides%29.ogg.mp3",
+      },
+    ],
+  },
+  {
+    slug: "duck",
+    name: "Duck",
+    category: "birds",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/Duck_%2827479047527%29.jpg/1280px-Duck_%2827479047527%29.jpg",
+    mediaSources: [
+      {
+        type: "audio",
+        url: "https://upload.wikimedia.org/wikipedia/commons/transcoded/f/f3/Mudchute_duck_2.ogg/Mudchute_duck_2.ogg.mp3",
+      },
+    ],
+  },
+  {
+    slug: "owl",
+    name: "Owl",
+    category: "birds",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/8/8b/Owl_%2829211223804%29.jpg",
+    mediaSources: [
+      {
+        type: "audio",
+        url: "https://upload.wikimedia.org/wikipedia/commons/transcoded/9/91/Tawny_Owl_%28Strix_aluco%29_%28W1CDR0001519_BD8%29.ogg/Tawny_Owl_%28Strix_aluco%29_%28W1CDR0001519_BD8%29.ogg.mp3",
+      },
+    ],
+  },
+  {
+    slug: "dog",
+    name: "Dog",
+    category: "pets",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/e/e1/Photo_of_a_dog.jpg",
+    mediaSources: [
+      {
+        type: "audio",
+        url: "https://upload.wikimedia.org/wikipedia/commons/transcoded/5/58/Barking_of_a_dog_2.ogg/Barking_of_a_dog_2.ogg.mp3",
+      },
+    ],
+  },
+  {
+    slug: "cat",
+    name: "Cat",
+    category: "pets",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/e/e1/A_cat.jpg",
+    mediaSources: [
+      {
+        type: "audio",
+        url: "https://upload.wikimedia.org/wikipedia/commons/transcoded/6/62/Meow.ogg/Meow.ogg.mp3",
+      },
+    ],
+  },
+  {
+    slug: "bee",
+    name: "Bee",
+    category: "insects",
+    imageUrl: commonsFilePath("Flower_and_Bee.jpg"),
+    mediaSources: [
+      {
+        type: "audio",
+        url: "https://upload.wikimedia.org/wikipedia/commons/transcoded/0/0f/Bee_buzzing_sound_%28animal_noises%29.opus/Bee_buzzing_sound_%28animal_noises%29.opus.mp3",
+      },
+    ],
+  },
+  {
+    slug: "cricket",
+    name: "Cricket",
+    category: "insects",
+    imageUrl: commonsFilePath("Cricket.jpg"),
+    mediaSources: [
+      {
+        type: "audio",
+        url: "https://upload.wikimedia.org/wikipedia/commons/transcoded/8/80/Field_cricket_Gryllus_pennsylvanicus.ogg/Field_cricket_Gryllus_pennsylvanicus.ogg.mp3",
+      },
+    ],
+  },
 ];
 
 const state = {
@@ -81,7 +194,7 @@ const state = {
 const playback = {
   activeSlug: null,
   activeButton: null,
-  audio: null,
+  element: null,
 };
 
 let playSequence = 0;
@@ -147,7 +260,7 @@ function openCategory(categoryId, { skipPersist = false } = {}) {
   categoryView.hidden = true;
   animalView.hidden = false;
   renderAnimalGrid(categoryId);
-  announce(`${meta.label} category opened.`);
+  announce(`${meta.label} category.`);
 
   if (!skipPersist) {
     persistState();
@@ -159,7 +272,7 @@ function showHome({ skipPersist = false } = {}) {
   state.activeCategory = null;
   animalView.hidden = true;
   categoryView.hidden = false;
-  announce("Category screen.");
+  announce("Categories.");
 
   if (!skipPersist) {
     persistState();
@@ -190,15 +303,21 @@ function renderAnimalGrid(categoryId) {
 function loadCategoryVisual(imageElement, categoryId, meta) {
   loadImageWithFallback(
     imageElement,
-    buildFileCandidates(`assets/categories/${categoryId}`, CATEGORY_VISUAL_EXTENSIONS),
-    buildCategoryFallbackArtwork(categoryId, meta)
+    [
+      ...buildFileCandidates(`assets/categories/${categoryId}`, LOCAL_CATEGORY_EXTENSIONS),
+      meta.coverUrl,
+    ],
+    buildCategoryFallbackArtwork(meta)
   );
 }
 
 function loadAnimalVisual(imageElement, animal) {
   loadImageWithFallback(
     imageElement,
-    buildFileCandidates(`assets/gifs/${animal.slug}`, ANIMAL_VISUAL_EXTENSIONS),
+    [
+      ...buildFileCandidates(`assets/gifs/${animal.slug}`, LOCAL_ANIMAL_EXTENSIONS),
+      animal.imageUrl,
+    ],
     buildAnimalFallbackArtwork(animal)
   );
 }
@@ -225,21 +344,19 @@ function buildFileCandidates(basePath, extensions) {
   return extensions.map((extension) => `${basePath}.${extension}`);
 }
 
-function buildCategoryFallbackArtwork(categoryId, meta) {
+function buildCategoryFallbackArtwork(meta) {
   const svg = `
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" role="img" aria-label="${escapeXml(
       meta.label
     )}">
       <defs>
-        <linearGradient id="bg-${escapeXml(categoryId)}" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stop-color="${meta.palette.start}" />
-          <stop offset="100%" stop-color="${meta.palette.end}" />
+        <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#f6d89f" />
+          <stop offset="100%" stop-color="#8bc9c0" />
         </linearGradient>
       </defs>
-      <rect width="800" height="600" fill="url(#bg-${escapeXml(categoryId)})" />
-      <circle cx="670" cy="130" r="120" fill="rgba(255,255,255,0.18)" />
-      <circle cx="115" cy="520" r="150" fill="rgba(255,255,255,0.16)" />
-      <text x="400" y="290" text-anchor="middle" font-family="Trebuchet MS, Arial, sans-serif" font-size="108" font-weight="700" fill="rgba(255,251,245,0.96)">${escapeXml(
+      <rect width="800" height="600" fill="url(#bg)" />
+      <text x="400" y="315" text-anchor="middle" font-family="Trebuchet MS, Arial, sans-serif" font-size="108" font-weight="700" fill="rgba(255,251,245,0.96)">${escapeXml(
         meta.label
       )}</text>
     </svg>
@@ -249,21 +366,18 @@ function buildCategoryFallbackArtwork(categoryId, meta) {
 }
 
 function buildAnimalFallbackArtwork(animal) {
-  const meta = CATEGORY_META[animal.category];
   const svg = `
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" role="img" aria-label="${escapeXml(
       animal.name
     )}">
       <defs>
-        <linearGradient id="bg-${escapeXml(animal.slug)}" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stop-color="${meta.palette.start}" />
-          <stop offset="100%" stop-color="${meta.palette.end}" />
+        <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#f6d89f" />
+          <stop offset="100%" stop-color="#8bc9c0" />
         </linearGradient>
       </defs>
-      <rect width="800" height="600" fill="url(#bg-${escapeXml(animal.slug)})" />
-      <circle cx="670" cy="130" r="120" fill="rgba(255,255,255,0.18)" />
-      <circle cx="115" cy="520" r="150" fill="rgba(255,255,255,0.16)" />
-      <text x="400" y="285" text-anchor="middle" font-family="Trebuchet MS, Arial, sans-serif" font-size="104" font-weight="700" fill="rgba(255,251,245,0.96)">${escapeXml(
+      <rect width="800" height="600" fill="url(#bg)" />
+      <text x="400" y="315" text-anchor="middle" font-family="Trebuchet MS, Arial, sans-serif" font-size="98" font-weight="700" fill="rgba(255,251,245,0.96)">${escapeXml(
         animal.name
       )}</text>
     </svg>
@@ -287,107 +401,120 @@ function handlePlayClick(animal, button) {
   playback.activeSlug = animal.slug;
   playback.activeButton = button;
   button.classList.add("is-playing");
-  announce(`${animal.name} sound.`);
+  announce(`${animal.name}.`);
 
-  playAudioIfAvailable(animal, currentSequence).then((playedAudio) => {
+  playMediaIfAvailable(animal, currentSequence).then((played) => {
     if (currentSequence !== playSequence) {
       return;
     }
 
-    if (!playedAudio) {
+    if (!played) {
       stopCurrentPlayback({ announce: false });
-      announce(`${animal.name} sound file missing.`);
+      announce(`${animal.name} media missing.`);
     }
   });
 }
 
-function playAudioIfAvailable(animal, sequence) {
-  const sources = buildFileCandidates(`assets/sounds/${animal.slug}`, AUDIO_EXTENSIONS);
+function playMediaIfAvailable(animal, sequence) {
+  const sources = [
+    ...buildFileCandidates(`assets/sounds/${animal.slug}`, LOCAL_SOUND_EXTENSIONS).map((url) => ({
+      type: "audio",
+      url,
+    })),
+    ...animal.mediaSources,
+  ];
 
   return new Promise((resolve) => {
-    const audio = new Audio();
     let index = 0;
-    let timeoutId = null;
-
-    const clearAttempt = () => {
-      if (timeoutId) {
-        window.clearTimeout(timeoutId);
-        timeoutId = null;
-      }
-      audio.removeEventListener("loadeddata", handleLoaded);
-      audio.removeEventListener("error", handleError);
-    };
-
-    const finish = (didPlay) => {
-      clearAttempt();
-      if (!didPlay) {
-        audio.pause();
-        audio.src = "";
-      }
-      resolve(didPlay);
-    };
 
     const tryNext = () => {
-      clearAttempt();
-
       if (sequence !== playSequence) {
-        finish(false);
+        resolve(false);
         return;
       }
 
       if (index >= sources.length) {
-        finish(false);
+        resolve(false);
         return;
       }
 
-      audio.addEventListener("loadeddata", handleLoaded, { once: true });
-      audio.addEventListener("error", handleError, { once: true });
-      audio.src = sources[index];
+      const source = sources[index];
       index += 1;
-      audio.load();
+
+      const element = source.type === "video" ? document.createElement("video") : new Audio();
+      let timeoutId = null;
+
+      const cleanup = () => {
+        if (timeoutId) {
+          window.clearTimeout(timeoutId);
+          timeoutId = null;
+        }
+        element.removeEventListener("loadeddata", handleLoaded);
+        element.removeEventListener("error", handleError);
+      };
+
+      const handleLoaded = async () => {
+        cleanup();
+
+        if (sequence !== playSequence) {
+          stopElement(element);
+          resolve(false);
+          return;
+        }
+
+        try {
+          element.currentTime = 0;
+          playback.element = element;
+          element.onended = () => {
+            if (sequence === playSequence) {
+              stopCurrentPlayback({ announce: false });
+              announce(`${animal.name} done.`);
+            }
+          };
+          await element.play();
+          resolve(true);
+        } catch {
+          stopElement(element);
+          tryNext();
+        }
+      };
+
+      const handleError = () => {
+        cleanup();
+        stopElement(element);
+        tryNext();
+      };
+
+      element.preload = "auto";
+      element.src = source.url;
+      if ("playsInline" in element) {
+        element.playsInline = true;
+      }
+      element.addEventListener("loadeddata", handleLoaded, { once: true });
+      element.addEventListener("error", handleError, { once: true });
+      element.load();
 
       timeoutId = window.setTimeout(() => {
+        cleanup();
+        stopElement(element);
         tryNext();
-      }, 900);
-    };
-
-    const handleLoaded = async () => {
-      clearAttempt();
-
-      if (sequence !== playSequence) {
-        finish(false);
-        return;
-      }
-
-      try {
-        playback.audio = audio;
-        audio.onended = () => {
-          if (sequence === playSequence) {
-            stopCurrentPlayback({ announce: false });
-            announce(`${animal.name} done.`);
-          }
-        };
-        await audio.play();
-        resolve(true);
-      } catch {
-        finish(false);
-      }
-    };
-
-    const handleError = () => {
-      tryNext();
+      }, 2500);
     };
 
     tryNext();
   });
 }
 
+function stopElement(element) {
+  element.pause();
+  element.removeAttribute("src");
+  element.load();
+}
+
 function stopCurrentPlayback({ announce }) {
-  if (playback.audio) {
-    playback.audio.pause();
-    playback.audio.currentTime = 0;
-    playback.audio.src = "";
-    playback.audio = null;
+  if (playback.element) {
+    stopElement(playback.element);
+    playback.element = null;
   }
 
   if (playback.activeButton) {
@@ -398,7 +525,7 @@ function stopCurrentPlayback({ announce }) {
   playback.activeButton = null;
 
   if (announce) {
-    liveStatus.textContent = "Sound stopped.";
+    liveStatus.textContent = "Stopped.";
   }
 }
 
